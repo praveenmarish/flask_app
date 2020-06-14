@@ -1,0 +1,24 @@
+<html>
+  <head>
+  	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
+    <title>Camera App</title>
+  </head>
+
+  <body>
+  	<center>
+      <div id="camera">
+	     <img src="{{ url_for('static', filename=path) }}" alt="capture">
+      </div>
+
+      <div id="btns">
+        <a href="{{ url_for('root') }}">
+          <img src="{{ url_for('static',filename='back.png') }}" alt="go back" class="btn"> 
+        </a>
+
+        <a href="{{ url_for('static', filename=path) }}" download>
+          <img src="{{ url_for('static',filename='download.png') }}" alt="save picture" class="btn">
+        </a>
+      </div>
+		</center>
+  </body>
+</html>
