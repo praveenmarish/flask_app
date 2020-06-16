@@ -3,21 +3,27 @@
 		<title>upload and display image</title>
 	</head>
 	<body>
-		<h2>Select an image to upload and display</h2>
+		<h2>
+			{% if intro %}
+				{{intro}}
+			{% endif %}
+		</h2>
 		<p>
-			{% with messages = get_flashed_messages() %}
-			{% if messages %}
-				<ul class=flashes>
-				{% for message in messages %}
-				<li>{{ message }}</li>
-				{% endfor %}
+			{% if message %}
+				<ul>
+					<li>{{ message }}</li>
 				</ul>
 			{% endif %}
-			{% endwith %}
 		</p>
+
 		{% if filename %}
 			<div>
 				<img src="{{ url_for('display_image', filename=filename) }}">
+			</div>
+			<div>
+				<a href="{{ url_for('predict', filename=filename)}}">
+					<input type="button" value="predict">
+				</a>
 			</div>
 		{% endif %}
 		<form method="post" action="/upload" enctype="multipart/form-data">
