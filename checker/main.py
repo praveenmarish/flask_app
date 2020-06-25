@@ -1,5 +1,8 @@
 import os
 from flask import Flask, request, redirect, url_for, render_template
+from PIL import Image
+from tensorflow import keras
+import numpy as np
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'static/images/'
@@ -10,6 +13,19 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 
 def allowed_file(filename):
 	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def model():
+	model=keras.models.load_model("model_2.h5")
+	return model
+
+def image_conditioning(filename):
+	path=os.path.join(app.config['UPLOAD_FOLDER'], filename)
+	image=Image.open(path)
+	imsize=(224,224)
+	image=image.resize(imsize)
+	image=keras.preprocessing.image.img_to_array(image)
+	image=np.expand_dims(image,axis=0)
+	return image
 	
 @app.route('/')
 def index():
@@ -36,7 +52,11 @@ def display_image(filename):
 
 @app.route('/predict/<filename>')
 def predict(filename):
-	message='kfljakljfpredict'
+	
+	model=keras.models.load_model("model_2.h5")
+	image=image_conditioning(filename)
+	results=model.predict_classes(image)
+	message=results[0]
 	return render_template('upload.html', message=message)
 
 if __name__ == "__main__":
